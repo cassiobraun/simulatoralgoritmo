@@ -1,0 +1,76 @@
+{% extends "layout.html" %}
+
+{% block style %}
+    <link rel="stylesheet" href="../static/index.css">
+{%endblock%}
+
+{% block main%}
+    <div class = "title">
+        <h1>search and sorting algorithm simulator</h1>
+        <h2>It is a program that simulates with tables the flow of data in a memory of an alogrithm, whether linear or ordering.</h2>
+        <img class = "img-index" src="{{ url_for('static', filename='duck.jpeg') }}" alt="imagemduck">
+    </div>
+
+    </main>
+        <div class="container">
+            <p class = "text" >Sorting algorithms organize data efficiently, making searches and processing faster.
+                Simple methods like Bubble Sort and Selection Sort work by repeatedly swapping or selecting elements,
+                while more advanced ones like Merge Sort and Quick Sort break data into smaller sections before sorting. Efficient sorting is essential in computing, improving databases, search engines,
+                and systems that process large amounts of information. </p>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>algorithm</th>
+                        <th>best case</th>
+                        <th>medium case</th>
+                        <th>worst case</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>Bubble Sort</th>
+                        <th>O(n)</th>
+                        <th>O(n²)</th>
+                        <th>O(n²)</th>
+                    </tr>
+                    <tr>
+                        <th>Selection Sort</th>
+                        <th>O(n²)</th>
+                        <th>O(n²)</th>
+                        <th>O(n²)</th>
+                    </tr>
+                    <tr>
+                        <th>Insertion Sort</th>
+                        <th>O(n)</th>
+                        <th>O(n²)</th>
+                        <th>O(n²)</th>
+                    </tr>
+                    <tr>
+                        <th>Merge Sort</th>
+                        <th>O(n log n)</th>
+                        <th>O(n log n)</th>
+                        <th>O(n log n)</th>
+                    </tr>
+                    <tr>
+                        <th>Quick Sort</th>
+                        <th>O(n log n)</th>
+                        <th>O(n log n)</th>
+                        <th>O(n²)</th>
+                    </tr>
+                     <tr>
+                        <th>Linear Search</th>
+                        <th>O(1)</th>
+                        <th>O(n)</th>
+                        <th>O(n)</th>
+                    </tr>
+                    <tr>
+                        <th>Binary Search</th>
+                        <th>O(1)</th>
+                        <th>O(log n)</th>
+                        <th>O(log n)</th>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+{%endblock%}

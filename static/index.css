@@ -1,0 +1,95 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+a{
+    color: black;
+    text-decoration: none;
+    transition: 0.3s;
+
+}
+a:hover{
+    opacity: 0.6;
+}
+#home
+{
+    margin-right: auto;
+}
+
+
+main
+{
+    background: url("image.jpeg") no-repeat
+    center center;
+    background-size: cover;
+    height: 92vh;
+}
+
+
+
+.title{
+    display: flex;
+    flex-direction: column; /* Deixa um texto em cima do outro */
+    justify-content: center; /* Centraliza verticalmente */
+    align-items: center; /* Centraliza horizontalmente */
+    height: 100vh; /* Ocupa a tela toda */
+    text-align: center;
+}
+
+h1
+{
+    font-size: 60px;
+    color: white;
+    text-align: center;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+h2
+{
+    font-size: 30px;
+    color: white;
+    text-align: center;
+    font-family: sans-serif;
+}
+
+img
+{
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    left:0;
+    margin-top: 400px;
+    margin-left: 20px;
+
+
+}
+.container
+{
+    background-color: white;
+}
+p {
+    text-align: center;
+    font-size: 28px;
+    color: #353432;
+    font-family: -apple-system;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 20px;
+    line-height: 1.7;
+}
+
+
+table{
+    margin: 0 auto;
+    margin-top: 20px;
+    border-collapse: collapse;
+    width: 100%;
+}
+th, td{
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+
+
+

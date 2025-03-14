@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block main %}
+    <div class="form-container">
+        <h1>Bubble Sort - Algoritmo</h1>
+
+        <form method="POST" action="/bubblesort">
+          <h2>elements</h2>
+            <input type="number" max = "1000" name="elements" id="elements" value="{{ 10 }}" required>
+            <button type="submit">gerar dados</button>
+        </form>
+        <div id="chart-container"></div>
+        <button onclick="startSorting()">Iniciar Ordenação</button>
+{% endblock %}

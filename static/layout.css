@@ -1,0 +1,158 @@
+/* Reset básico de margens e paddings para todos os elementos */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilo básico para links */
+a {
+    color: black;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.chart-container
+{
+    position: absolute;
+    display: flex;
+    align-items: center;
+}
+
+a:hover {
+    opacity: 0.6;
+    transform: scale(1.1); /* Aumenta o tamanho do link no hover */
+}
+
+/* Contêiner do formulário */
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+/* Estilo do formulário */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* Estilos do título */
+h1, h2 {
+    color: #ffffff;
+}
+
+/* Mensagem centralizada */
+.message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* Navegação fixa */
+nav
+{
+    display: flex;
+    height: 5vh;
+    background-color: white;
+    position: fixed;
+    width: 100%;
+    z-index: 100;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
+/* Container do conteúdo da nav */
+nav > div {
+    width: 20%;
+    display: flex;
+    align-items: center;
+    padding-left: 5%;
+}
+
+/* Link de Home */
+#home {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+
+.nav-list-container {
+    width: 80%;
+}
+
+/* Lista de navegação */
+.nav-list {
+    display: flex;
+    list-style: none;
+    gap: 40px;
+}
+
+/* Estilos dos itens da lista de navegação */
+.nav-list li a {
+    text-decoration: none;
+    color: #333;
+}
+
+/* Estilo do conteúdo principal */
+main {
+    background-color: #353432;
+    background-size: cover;
+    min-height: 92vh;
+}
+
+/* Estilos do footer */
+footer {
+    position: relative;
+    width: 100%;
+    background: dimgrey;
+    min-height: 100px;
+    padding: 20px 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+/* Estilos para os ícones sociais no footer */
+footer .social_icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0;
+    flex-wrap: wrap;
+}
+
+footer .social_icon li {
+    list-style: none;
+}
+
+footer .social_icon li a {
+    font-size: 2em;
+    color: #fff;
+    margin: 0 15px; /* Aumenta o espaçamento entre os ícones */
+    display: inline-block;
+    transition: 0.5s;
+}
+
+footer .social_icon li a:hover {
+    transform: translateY(-10px);
+    color: #ff9900; /* Muda a cor no hover */
+}
+
+/* Estilo do texto no footer */
+footer p {
+    color: #fff;
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    font-size: 0.75rem;
+}
+

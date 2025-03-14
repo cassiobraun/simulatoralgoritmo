@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <title>layout</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../static/layout.css">
+    {%block style%}
+    {%endblock%}
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <div>
+            <a href="/" id = "home">Home</a>
+          </div>
+            <div class = "nav-list-container">
+                <ul class = "nav-list">
+                    <li><a href="/linear">Linear Search</a></li>
+                    <li><a href="/binary">Binary Search</a></li>
+                    <li><a href="/bubblesort">Bubble Sort</a></li>
+                    <li><a href="/selection">Selection Sort</a></li>
+                    <li><a href="/insertion">Insertion Sort</a></li>
+                    <li><a href="/merge">Merge Sort</a></li>
+                    <li><a href="/quick">Quick Sort</a></li>
+                </ul>
+            </div>
+        </nav>
+      </header>
+
+       <main class="container py-5 text-center">
+            {% block main %}{% endblock %}
+       </main>
+
+    <script>
+        let data = {{ dados | tojson | safe }};
+
+        // Configurações do gráfico
+        const width = 600;
+        const height = 500;
+        const margin = { top: 20, right: 30, bottom: 30, left: 40 };
+
+        const svg = d3.select("#chart-container")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height)
+
+        const x = d3.scaleBand()
+            .domain(data.map((i) => i))
+            .range([margin.left, width - margin.right])
+            .padding(0.1);
+
+        const y = d3.scaleLinear()
+            .domain([0, d3.max(data)])
+            .range([height - margin.bottom, margin.top]);
+
+        const bars = svg.append("g")
+            .selectAll("rect")
+            .data(data)
+            .join("rect")
+            .attr("x", (d, i) => x(i))
+            .attr("y", d => y(d))
+            .attr("height", d => y(0) - y(d))
+            .attr("width", x.bandwidth())
+            .attr("fill", "steelblue");
+
+        // Função para atualizar o gráfico
+        function updateChart(newData) {
+            bars.data(newData)
+                .transition()
+                .duration(500)
+                .attr("y", d => y(d))
+                .attr("height", d => y(0) - y(d))
+                .attr("fill", "green");
+
+        }
+
+        // Função para iniciar a ordenação
+        async function startSorting() {
+            const response = await fetch("/bubblesort/steps");
+            const steps = await response.json();
+
+            for (let i = 0; i < steps.length; i++) {
+                updateChart(steps[i]);
+                await sleep(500); // Delay de 500ms entre cada passo
+            }
+        }
+
+        // Função para "dormir" (delay)
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+    </script>
+       <footer>
+          <ul class="social_icon">
+            <li>
+              <a href="https://www.liberato.com.br"><ion-icon name="school-outline"></ion-icon></a>
+            </li>
+            <li>
+              <a href="https://www.linkedin.com/in/cassio-barbosa-braun-122b162b0/https://www.linkedin.com/in/cassio-barbosa-braun-122b162b0/"><ion-icon name="logo-linkedin"></ion-icon></a>
+            </li>
+            <li>
+              <a href="https://www.instagram.com/caassio_braun/"><ion-icon name="logo-instagram"></ion-icon></a>
+            </li>
+          </ul>
+          <p>
+            &copy;2025 Cassio Barbosa Braun | All Rights Reserved
+          </p>
+    </footer>
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</body>
+</html>

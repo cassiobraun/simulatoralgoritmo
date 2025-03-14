@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+
+{% block main %}
+    <div class="form-container">
+        <h1>binary Search - Algoritmo</h1>
+
+      <form method="POST" action="/binary">
+          <div class="quant">
+              <h2>quant</h2>
+              <input type="number" max="1000" name="elements" id="elements" value="{{ 10 }}" required>
+          </div>
+          <div class="search">
+              <h2>number</h2>
+
+              <input type="number" name="search" id="search" value="{{ 0 }}" required>
+          </div>
+          <button type="submit">search</button>
+    </div>
+
+{% endblock %}

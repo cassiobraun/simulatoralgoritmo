@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block main %}
+      <div class="form-container">
+        <h1>selection sort - Algoritmo</h1>
+
+        <form method="POST" action="/selection">
+          <h2>elements</h2>
+            <input type="number" max = "1000" name="elements" id="elements" value="{{ 10 }}" required>
+            <button type="submit">Ordenar</button>
+
+        </form>
+    </div>
+{% endblock %}
