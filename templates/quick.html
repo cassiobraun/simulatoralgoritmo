@@ -1,14 +1,106 @@
 {% extends "layout.html" %}
 
 {% block main %}
-      <div class="form-container">
-        <h1>quick sort - Algoritmo</h1>
+    <div class="form-container">
+      <h1>quick sort - Algoritmo</h1>
 
-        <form method="POST" action="/quick">
-          <h2>elements</h2>
-            <input type="number" max = "1000" name="elements" id="elements" value="{{ 10 }}" required>
-            <button type="submit">Ordenar</button>
-
-        </form>
+      <form method="POST" action="/quick">
+        <h2>elements</h2>
+        <input type="number" max="100" name="elements" id="elements" value="{{ quant }}" required>
+        <button type="submit">gerar</button>
+      </form>
+      <button id="sort-btn">ordenar</button>
+      <div id="chart-container"></div>
     </div>
+
+    <script>
+      var dados = {{dados | tojson}};
+      var quant = {{quant}};
+      var chartContainer = d3.select("#chart-container");
+      
+      var height = 600, width = 800, barWidth = width/quant;
+
+      var highlightedIndices = []
+
+      function sleep(ms) {
+        return new Promise(resolve => {
+          setTimeout(resolve, ms);
+        }
+      );}
+
+      var chart = chartContainer.append("svg")
+      .attr("width", width)
+      .attr("height", height);
+
+      function updateChart()
+      {
+          chart.selectAll("*").remove();
+
+          chart.selectAll("rect")
+        .data(dados)
+        .enter()
+        .append("rect")
+        .attr("x", (d, i) => i * barWidth)
+        .attr("y", d => height - d * (quant < 21 ? 30 : 6)) 
+        .attr("width", barWidth - 1)
+        .attr("height", d => d * (quant < 21 ? 30 : 6)) 
+        .attr("fill", (d, i) => highlightedIndices.includes(i) ? "red" : "steelblue");
+                                                                      
+      chart.selectAll("text")
+        .data(dados)
+        .enter()
+        .append("text")
+        .attr("x", (d, i) => i * barWidth + barWidth / 2)
+        .attr("y", d => height - d * (quant < 21 ? 30 : 6) - 5)
+        .attr("text-anchor", "middle")
+        .attr("fill", "white")
+        .text(d => d);
+      }
+
+      updateChart(); 
+      
+      async function startquick(left, right) 
+      {
+        if (left >= right)return;
+
+          let pi = await partition(left, right);
+          await startquick(left, pi-1);
+          await startquick(pi+1, right);
+      }
+
+      async function partition(left, right)
+          {
+            let pivo = dados[right];
+            let i = left - 1;
+            let delay = quant > 69 ? 280 : quant > 50 ? 300 : quant > 19 ? 400 : quant < 20 ? 600 : 250;
+
+            for(let j = left; j < right; j++)
+            {
+              highlightedIndices = [j,right];
+              if(pivo >= dados[j])
+              {
+                i++;
+                [dados[i], dados[j]] = [dados[j], dados[i]];
+
+                updateChart();
+                await sleep(delay);
+              }
+            }
+
+            [dados[i + 1], dados[right]] = [dados[right], dados[i + 1]]; 
+            updateChart();
+            await sleep(delay);
+
+            return i+1;
+
+          }
+
+      document.getElementById("sort-btn").addEventListener("click", async function (event) {
+        event.preventDefault();
+        await startquick(0, dados.length - 1);
+        highlightedIndices = [];
+        updateChart();
+      });
+    </script>
+    
 {% endblock %}

@@ -4,11 +4,97 @@
     <div class="form-container">
         <h1>Bubble Sort - Algoritmo</h1>
 
-        <form method="POST" action="/bubblesort">
-          <h2>elements</h2>
-            <input type="number" max = "1000" name="elements" id="elements" value="{{ 10 }}" required>
-            <button type="submit">gerar dados</button>
+        <form id="sort-form" method="POST" action="/bubblesort">
+          <h2>Quantidade de elementos</h2>
+          <input type="number" max="100" name="elements" id="elements" value="{{ quant }}" required>
+          <button type="submit">Gerar</button>
         </form>
+
+        <button id="sort-btn" onclick="startSorting()">Ordenar</button>
+
         <div id="chart-container"></div>
-        <button onclick="startSorting()">Iniciar Ordenação</button>
+    </div>
+
+    <script>
+      var dados = {{ dados | tojson }};
+      var quant = {{ quant }};
+      var chartContainer = d3.select("#chart-container");
+
+      var width = 800, height = 600, barWidth = width / quant;
+
+      var chart = chartContainer.append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+      function updateChart() {
+        chart.selectAll("*").remove();
+
+        chart.selectAll("rect")
+          .data(dados)
+          .enter()
+          .append("rect")
+          .attr("x", (d, i) => i * barWidth)
+          .attr("y", d => height - d * (quant < 21 ? 30 : 6)) 
+          .attr("width", barWidth - 1)
+          .attr("height", d => d * (quant < 21 ? 30 : 6)) 
+          .attr("fill", (d, i) => i === highlightedIndex ? "red" : "steelblue"); // Barra vermelha se estiver sendo destacada
+
+        chart.selectAll("text")
+          .data(dados)
+          .enter()
+          .append("text")
+          .attr("x", (d, i) => i * barWidth + barWidth / 2)
+          .attr("y", d => height - d * (quant < 21 ? 30  : 6) - 5)
+          .attr("text-anchor", "middle")
+          .attr("fill", "white")
+          .text(d => d);
+      }
+
+      updateChart(); 
+
+      var highlightedIndex = -1; 
+
+      // implementacao do algoritmo:
+
+      function startSorting() {
+        let i = 0;
+        let j = 0;
+        let isSorted = false;
+
+        function step() {
+          if (i < quant) {
+            if (j < quant - i - 1) {
+              highlightedIndex = j+1; // Destaca a barra que está sendo comparada
+
+              if (dados[j] > dados[j + 1]) {
+                var temp = dados[j];
+                dados[j] = dados[j + 1];
+                dados[j + 1] = temp;
+              }
+
+              updateChart();
+              j++;
+              
+              // Ajuste no tempo de espera com base no número de elementos
+            let delay = quant > 69 ? 30 : quant > 50 ? 50 : quant > 19 ? 100 : quant < 20 ? 280 : 250;
+
+              setTimeout(step, delay); // Espera ajustada antes de continuar para o próximo passo
+            } else {
+              i++;
+              j = 0;
+              setTimeout(step, 50);
+            }
+          } else {
+            isSorted = true;
+          }
+        }
+        step();
+      }
+
+      // Impedir o envio do formulário ao clicar no botão "Ordenar"
+      document.getElementById("sort-btn").addEventListener("click", function(event) {
+        event.preventDefault(); 
+        startSorting(); 
+      });
+    </script>
 {% endblock %}

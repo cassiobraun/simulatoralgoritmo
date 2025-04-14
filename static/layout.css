@@ -45,10 +45,13 @@ form {
 }
 
 /* Estilos do título */
-h1, h2 {
+h1{
     color: #ffffff;
 }
-
+h2 {
+    color: #ffffff;
+    font-size: 20px;
+}
 /* Mensagem centralizada */
 .message {
     display: flex;
@@ -137,14 +140,14 @@ footer .social_icon li {
 footer .social_icon li a {
     font-size: 2em;
     color: #fff;
-    margin: 0 15px; /* Aumenta o espaçamento entre os ícones */
+    margin: 0 15px; 
     display: inline-block;
     transition: 0.5s;
 }
 
 footer .social_icon li a:hover {
     transform: translateY(-10px);
-    color: #ff9900; /* Muda a cor no hover */
+    color: #ff9900; /
 }
 
 /* Estilo do texto no footer */

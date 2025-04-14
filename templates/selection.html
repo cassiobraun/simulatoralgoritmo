@@ -1,14 +1,95 @@
 {% extends "layout.html" %}
 
 {% block main %}
-      <div class="form-container">
-        <h1>selection sort - Algoritmo</h1>
+    <div class="form-container">
+        <h1>Selection Sort - Algoritmo</h1>
 
-        <form method="POST" action="/selection">
-          <h2>elements</h2>
-            <input type="number" max = "1000" name="elements" id="elements" value="{{ 10 }}" required>
-            <button type="submit">Ordenar</button>
-
+        <form id="sort-form" method="POST" action="/selection">
+          <h2>Quantidade de elementos</h2>
+          <input type="number" max="100" name="elements" id="elements" value="{{ quant }}" required>
+          <button type="submit" id="generate-btn">Gerar</button>
         </form>
+
+        <button id="sort-btn">Ordenar</button>
+
+        <!-- Contêiner do gráfico -->
+        <div id="chart-container"></div>
     </div>
+
+    <script>
+      var dados = {{ dados | tojson }};
+      var quant = {{ quant }};
+      var highlightedIndex = -1;
+
+      var chartContainer = d3.select("#chart-container");
+      var width = 800, height = 600, barWidth = width / quant;
+
+      // Criando o gráfico
+      var chart = chartContainer.append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+      function updateChart(dados, highlightedIndex, highlightedIndex2) {
+        chart.selectAll("*").remove(); // Limpa o gráfico anterior
+
+        chart.selectAll("rect")
+          .data(dados)
+          .enter()
+          .append("rect")
+          .attr("x", (d, i) => i * barWidth)
+          .attr("y", d => height - d * (quant < 21 ? 30 : 6)) 
+          .attr("width", barWidth - 1)
+          .attr("height", d => d * (quant < 21 ? 30 : 6)) 
+          .attr("fill", (d, i) => i === highlightedIndex ? "red" : "steelblue") // Barra vermelha se estiver sendo destacada
+          .attr("fill", (d, i) => i === highlightedIndex2 ? "green" : "steelblue"); // Barra vermelha se estiver sendo destacada
+
+        chart.selectAll("text")
+          .data(dados)
+          .enter()
+          .append("text")
+          .attr("x", (d, i) => i * barWidth + barWidth / 2)
+          .attr("y", d => height - d * (quant < 21 ? 30 : 6) - 5)
+          .attr("text-anchor", "middle")
+          .attr("fill", "white")
+          .text(d => d);
+      }
+
+
+      updateChart(dados, -1, -1); // Inicializa o gráfico
+
+      function startSelectionSort() {
+        let i = 0;
+
+        function step() {
+          if (i < quant - 1) {
+            let minIndex = i;
+
+            for (let j = i + 1; j < quant; j++) {
+              if (dados[j] < dados[minIndex]) {
+                minIndex = j;
+              }
+            }
+
+            if (minIndex !== i) {
+              let temp = dados[i];
+              dados[i] = dados[minIndex];
+              dados[minIndex] = temp;
+            }
+
+            highlightedIndex = i;
+            updateChart(dados, highlightedIndex, minIndex); 
+
+            i++;
+            setTimeout(step, 200);
+          }
+        }
+
+        step();
+      }
+
+      document.getElementById("sort-btn").addEventListener("click", function(event) {
+        event.preventDefault();
+        startSelectionSort();
+      });
+    </script>
 {% endblock %}

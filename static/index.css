@@ -29,10 +29,10 @@ main
 
 .title{
     display: flex;
-    flex-direction: column; /* Deixa um texto em cima do outro */
-    justify-content: center; /* Centraliza verticalmente */
-    align-items: center; /* Centraliza horizontalmente */
-    height: 100vh; /* Ocupa a tela toda */
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center;
+    height: 100vh; 
     text-align: center;
 }
 

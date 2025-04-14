@@ -1,20 +1,114 @@
 {% extends "layout.html" %}
 
 {% block main %}
-    <div class="form-container">
-        <h1>Linear Search - Algoritmo</h1>
+<div class="form-container">
+    <h1>linear search - Algoritmo</h1>
 
-      <form method="POST" action="/linear">
-          <div class="quant">
-              <h2>quant</h2>
-              <input type="number" max="1000" name="elements" id="elements" value="{{ 10 }}" required>
-          </div>
-          <div class="search">
-              <h2>number</h2>
+    <form method="POST" action="/linear" class="form-inline">
+        <h2>elements</h2>
+            <input type="number" max = "100" name="elements" id="elements" value="{{ quant }}" required>
+            <button type="submit">gerar</button>
+        <h2>number search</h2>
+            <input type="number" max = "{{quant}}" name="search" id="search" value="{{ number }}" required>
+            <button type="submit">ok</button>
+    </form>
+        <button id="sort-btn" onclick ="startLinearSearch()" style = "padding: 5px; font-size: 18px;" >start</button>
 
-              <input type="number" name="search" id="search" value="{{ 0 }}" required>
-          </div>
-          <button type="submit">search</button>
-    </div>
+        <style>
+            .form-inline {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 10px; 
+                flex-wrap: nowrap;
+                margin-bottom: 20px;
+            }
+            
+            .form-inline button {
+                padding: 3px;
+                font-size: 15px;
+            }
+            
+            .form-inline label {
+                font-weight: bold;
+            }
+            
+            </style>
+      <div id="chart-container"></div>
+</div>
 
+        <script>
+            var dados = {{ dados | tojson }};
+            var quant = {{ quant }};
+            var number = {{number}};
+            var highlightedIndex = -1;
+            var chartContainer = d3.select("#chart-container");
+
+            var width = 800, height = 600;
+            var barWidth = width / quant;
+
+            var chart = chartContainer.append("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+            function updateChart() {
+                chart.selectAll("*").remove();
+
+                chart.selectAll("rect")
+                    .data(dados)
+                    .enter()
+                    .append("rect")
+                    .attr("x", (d, i) => i * barWidth)
+                    .attr("y", d => height - d * (quant < 21 ? 30 : 6)) 
+                    .attr("width", barWidth - 1)
+                    .attr("height", d => d * (quant < 21 ? 30 : 6)) 
+                    .attr("fill", (d, i) => i === highlightedIndex ? "red" : "steelblue");
+
+                chart.selectAll("text")
+                    .data(dados)
+                    .enter()
+                    .append("text")
+                    .attr("x", (d, i) => i * barWidth + barWidth / 2)
+                    .attr("y", d => height - d * (quant < 21 ? 30 : 6) - 5)
+                    .attr("text-anchor", "middle")
+                    .attr("fill", "white")
+                    .text(d => d);
+            }
+
+            updateChart();
+
+            function startLinearSearch() {
+                let i = 0;
+
+                function step() {
+                    if (i < quant) {
+                        highlightedIndex = i;
+                        updateChart();
+
+                        let delay = quant > 50 ? 150 : quant > 20 ? 300 : 250;
+
+                        setTimeout(() => {
+                            if (dados[i] == number) {
+                                console.log("Número encontrado:", number);
+                                return;
+                            }
+                            i++;
+                            step();
+                        }, delay);
+                    } else {
+                        console.log("Número não encontrado.");
+                    }
+                }
+
+                step();
+            }
+
+            document.getElementById("search-btn").addEventListener("click", function(event) {
+                event.preventDefault();
+                number = parseInt(document.getElementById("search").value);
+                startLinearSearch();
+            });
+
+            updateChart();
+        </script>
 {% endblock %}

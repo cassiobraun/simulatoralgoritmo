@@ -1,14 +1,114 @@
 {% extends "layout.html" %}
 
 {% block main %}
-      <div class="form-container">
-        <h1>merge sort - Algoritmo</h1>
+<div class="form-container">
+  <h1>merge sort - Algoritmo</h1>
 
-        <form method="POST" action="/merge">
-          <h2>elements</h2>
-            <input type="number" max = "1000" name="elements" id="elements" value="{{ 10 }}" required>
-            <button type="submit">Ordenar</button>
+  <form method="POST" action="/merge">
+    <h2>elements</h2>
+    <input type="number" max="100" name="elements" id="elements" value="{{ quant }}" required>
+    <button type="submit">gerar</button>
+  </form>
+  <button id="sort-btn">ordenar</button>
+  <div id="chart-container"></div>
+</div>
 
-        </form>
-    </div>
+<script>
+  var dados = {{ dados | tojson }};
+  var quant = {{ quant }};
+  var chartContainer = d3.select("#chart-container");
+
+  var width = 800, height = 600, barWidth = width / quant;
+
+  var highlightedIndex = -1;
+
+  function sleep(ms) {
+    return new Promise(resolve => {
+      setTimeout(resolve, ms);
+    });
+  }
+
+  var chart = chartContainer.append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+  function updateChart() {
+    chart.selectAll("*").remove();
+
+    chart.selectAll("rect")
+      .data(dados)
+      .enter()
+      .append("rect")
+      .attr("x", (d, i) => i * barWidth)
+      .attr("y", d => height - d * (quant < 21 ? 30 : 6)) 
+      .attr("width", barWidth - 1)
+      .attr("height", d => d * (quant < 21 ? 30 : 6)) 
+      .attr("fill", (d, i) => i === highlightedIndex ? "red" : "steelblue");
+
+    chart.selectAll("text")
+      .data(dados)
+      .enter()
+      .append("text")
+      .attr("x", (d, i) => i * barWidth + barWidth / 2)
+      .attr("y", d => height - d * (quant < 21 ? 30 : 6) - 5)
+      .attr("text-anchor", "middle")
+      .attr("fill", "white")
+      .text(d => d);
+  }
+
+  updateChart(); 
+
+  async function startmerge(start, end) {
+    if (end - start <= 1) return;
+
+    const mid = Math.floor((start + end) / 2);
+
+    await startmerge(start, mid);
+    await startmerge(mid, end);
+
+    await step(start, mid, end);
+
+    async function step(start, mid, end) {
+      const left = dados.slice(start, mid);
+      const right = dados.slice(mid, end);
+      let i = 0, j = 0, k = start;
+
+      let delay = quant > 69 ? 280 : quant > 50 ? 300 : quant > 19 ? 400 : quant < 20 ? 600 : 250;
+
+      while (i < left.length && j < right.length) {
+        highlightedIndex = k;
+        if (left[i] < right[j]) {
+          dados[k++] = left[i++];
+        } else {
+          dados[k++] = right[j++];
+        }
+        updateChart();
+        await sleep(delay);
+      }
+
+      while (i < left.length) {
+        highlightedIndex = k;
+        dados[k++] = left[i++];
+        updateChart();
+        await sleep(delay);
+      }
+
+      while (j < right.length) {
+        highlightedIndex = k;
+        dados[k++] = right[j++];
+        updateChart();
+        await sleep(delay);
+      }
+
+      highlightedIndex = -1;
+      updateChart();
+    }
+  }
+
+  document.getElementById("sort-btn").addEventListener("click", async function(event) {
+    event.preventDefault();
+    await startmerge(0, quant);
+  });
+</script>
+
 {% endblock %}
